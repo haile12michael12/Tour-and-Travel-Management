@@ -1,0 +1,15 @@
+{
+    "name": "michael/tour-and-travel-management",
+    "autoload": {
+        "psr-4": {
+            "Michael\\TourAndTravelManagement\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "haile12michael12",
+            "email": "michaelhaile12@yahoo.com"
+        }
+    ],
+    "require": {}
+}
