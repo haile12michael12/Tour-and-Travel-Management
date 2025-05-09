@@ -30,13 +30,7 @@
     <link rel="stylesheet" href="<?php echo APPURL; ?>/assets/css/owl.css">
     <link rel="stylesheet" href="<?php echo APPURL; ?>/assets/css/animate.css">
     <link rel="stylesheet"href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
-<!--
 
-TemplateMo 580 Woox Travel
-
-https://templatemo.com/tm-580-woox-travel
-
--->
 
   </head>
 

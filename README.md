@@ -1,60 +1,188 @@
-## Complete Tours and Travel Management System
-This project is a fully-featured Tours and Travel Management System developed using PHP, MySQL, Bootstrap, and PDO. The system includes a user-friendly interface for browsing and booking tours, along with a robust admin panel for managing tours, bookings, and users. Additionally, it integrates PayPal for secure online payments. The platform is designed to be responsive, ensuring an optimal experience across various devices.
+# Tour and Travel Management System
 
-##  Features
-## User Side
-Tour Listings: Browse and search for available tours.
-Tour Details: View detailed information about each tour.
-Tour Booking: Book tours directly through the platform.
-User Registration and Login: Create an account, log in, and manage bookings.
-PayPal Integration: Secure payment processing for tour bookings.
-## Admin Panel
-Dashboard: Overview of site statistics and recent activities.
-Manage Tours: Add, update, and delete tour listings.
-Booking Management: View and manage customer bookings.
-User Management: Add, edit, and remove users.
-Settings: Configure site settings, tour options, and payment settings.
-## Technologies Used
-PHP: Server-side scripting language.
-MySQL: Database management system.
-Bootstrap: Front-end framework for responsive design.
-PDO: PHP Data Objects for secure database interaction.
+A modern PHP MVC-based web application for managing tour and travel bookings, destinations, and user accounts.
+
+## Features
+
+- User Authentication (Login/Register)
+- Admin Panel
+- Tour Booking System
+- City and Country Management
+- Responsive Design
+- Secure Password Handling
+- Session Management
+
+## Technology Stack
+
+- PHP 7.4+
+- MySQL/MariaDB
+- MVC Architecture
+- PDO for Database Operations
+- Composer for Dependency Management
+
+## Directory Structure
+
+```
+├── app/
+│   ├── Controllers/     # Application controllers
+│   ├── Models/         # Database models
+│   ├── Views/          # View templates
+│   └── Core/           # Core framework classes
+├── public/
+│   ├── assets/         # CSS, JS, and images
+│   └── index.php       # Application entry point
+├── config/             # Configuration files
+├── vendor/             # Composer dependencies
+└── composer.json       # Composer configuration
+```
+
 ## Installation
-1. the repository:
 
-git clone https://github.com/yourusername/tours-and-travel.git
-2.Navigate to the project directory:
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/tour-and-travel-management.git
+cd tour-and-travel-management
+```
 
+2. Install dependencies:
+```bash
+composer install
+```
 
-cd tours-and-travel-management
-3.Create a database and import the provided SQL file:
+3. Create a `.env` file in the root directory with the following content:
+```
+DB_HOST=localhost
+DB_NAME=tour_travel_db
+DB_USER=your_database_user
+DB_PASS=your_database_password
 
-Create a new database in MySQL.
-Import the database.sql file located in the sql directory.
-4.Update database configuration:
+APP_ENV=development
+APP_DEBUG=true
+APP_URL=http://localhost
+```
 
-Open config.php and update the database credentials.
-Configure PayPal settings:
+4. Import the database schema:
+```bash
+mysql -u your_database_user -p your_database_name < database/schema.sql
+```
 
-Open paypal_config.php and update the PayPal API credentials.
-5.Run the application:
+5. Configure your web server to point to the `public` directory.
 
-Start your local server (e.g., using XAMPP or WAMP).
-Access the application in your browser at http://localhost/tours-and-travel.
+## Database Structure
+
+### Tables
+
+1. **users**
+   - id (Primary Key)
+   - email
+   - username
+   - mypassword
+   - created_at
+
+2. **admins**
+   - id (Primary Key)
+   - adminname
+   - email
+   - mypassword
+   - created_at
+
+3. **countries**
+   - id (Primary Key)
+   - name
+   - image
+   - continent
+   - population
+   - territory
+   - description
+   - created_at
+
+4. **cities**
+   - id (Primary Key)
+   - name
+   - image
+   - trip_days
+   - price
+   - country_id (Foreign Key)
+   - created_at
+
+5. **bookings**
+   - id (Primary Key)
+   - name
+   - phone_number
+   - num_of_geusts
+   - checkin_date
+   - destination
+   - status
+   - city_id (Foreign Key)
+   - user_id (Foreign Key)
+   - payment
+   - created_at
+
 ## Usage
-## Admin Panel:
 
-Access the admin panel at http://localhost/tours-and-travel/admin.
-Use the default admin credentials provided in the installation guide to log in.
-User Registration and Tour Booking:
+### User Features
 
-Users can register and log in to browse and book tours.
-Secure payments can be made through PayPal.
+1. **Registration**
+   - Visit `/register`
+   - Fill in email, username, and password
+   - Submit form
+
+2. **Login**
+   - Visit `/login`
+   - Enter email and password
+   - Select user type (user/admin)
+   - Submit form
+
+3. **Booking**
+   - Browse available destinations
+   - Select dates and number of guests
+   - Complete booking process
+
+### Admin Features
+
+1. **Dashboard**
+   - View all bookings
+   - Manage users
+   - Add/Edit destinations
+   - Process bookings
+
+2. **Country Management**
+   - Add new countries
+   - Edit country details
+   - Upload country images
+
+3. **City Management**
+   - Add new cities
+   - Set prices and trip duration
+   - Manage city images
+
+## Security Features
+
+- Password Hashing using PHP's password_hash()
+- PDO Prepared Statements
+- Input Validation
+- XSS Prevention
+- CSRF Protection
+- Session Management
+
 ## Contributing
-Contributions are welcome! Please fork this repository and submit pull requests for any enhancements or bug fixes.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## License
-This project is licensed under the MIT License. See the LICENSE file for more details.
 
-## Contact
-For any inquiries or support, please contac
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Support
+
+For support, email michaelhaile12@yahoo.com or create an issue in the repository.
+
+## Acknowledgments
+
+- PHP Community
+- MVC Architecture Pattern
+- All contributors who have helped shape this project
