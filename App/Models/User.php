@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Core\Model;
+use PDO;
+use PDOException;
 
 class User extends Model
 {
@@ -34,37 +36,90 @@ class User extends Model
         return null;
     }
 
-    public static function create(array $data): bool
+    public function create(array $data): bool
     {
-        return self::query(
-            "INSERT INTO users (email, username, mypassword) VALUES (?, ?, ?)",
-            [
-                $data['email'],
-                $data['username'],
-                $data['mypassword']
-            ]
-        )->rowCount() > 0;
+        $sql = "INSERT INTO {$this->table} (
+                    name, 
+                    email, 
+                    password, 
+                    role,
+                    created_at
+                ) VALUES (
+                    :name,
+                    :email,
+                    :password,
+                    :role,
+                    NOW()
+                )";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => password_hash($data['password'], PASSWORD_DEFAULT),
+                'role' => $data['role'] ?? 'user'
+            ]);
+        } catch (PDOException $e) {
+            error_log("Error creating user: " . $e->getMessage());
+            return false;
+        }
     }
 
-    public static function update(int $id, array $data): bool
+    public function findById(int $id)
     {
-        return self::query(
-            "UPDATE users SET email = ?, username = ?, mypassword = ? WHERE id = ?",
-            [
-                $data['email'],
-                $data['username'],
-                $data['mypassword'],
-                $id
-            ]
-        )->rowCount() > 0;
+        $sql = "SELECT * FROM {$this->table} WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch(PDO::FETCH_OBJ);
     }
 
-    public static function delete(int $id): bool
+    public function update(int $id, array $data): bool
     {
-        return self::query(
-            "DELETE FROM users WHERE id = ?",
-            [$id]
-        )->rowCount() > 0;
+        $sql = "UPDATE {$this->table} SET 
+                name = :name,
+                email = :email,
+                updated_at = NOW()
+                WHERE id = :id";
+
+        if (!empty($data['password'])) {
+            $sql = "UPDATE {$this->table} SET 
+                    name = :name,
+                    email = :email,
+                    password = :password,
+                    updated_at = NOW()
+                    WHERE id = :id";
+        }
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $params = [
+                'id' => $id,
+                'name' => $data['name'],
+                'email' => $data['email']
+            ];
+
+            if (!empty($data['password'])) {
+                $params['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+            }
+
+            return $stmt->execute($params);
+        } catch (PDOException $e) {
+            error_log("Error updating user: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function delete(int $id): bool
+    {
+        $sql = "DELETE FROM {$this->table} WHERE id = :id";
+        try {
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute(['id' => $id]);
+        } catch (PDOException $e) {
+            error_log("Error deleting user: " . $e->getMessage());
+            return false;
+        }
     }
 
     public static function getById(int $id): ?array
@@ -75,10 +130,37 @@ class User extends Model
         );
     }
 
-    public static function getAll(): array
+    public function getAll(int $page = 1, int $limit = 10): array
     {
-        return self::fetchAll(
-            "SELECT * FROM users ORDER BY created_at DESC"
-        );
+        $offset = ($page - 1) * $limit;
+        $sql = "SELECT * FROM {$this->table} ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
+        
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            error_log("Error fetching users: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function getTotalUsers(): int
+    {
+        $sql = "SELECT COUNT(*) as total FROM {$this->table}";
+        try {
+            $stmt = $this->db->query($sql);
+            return (int) $stmt->fetch(PDO::FETCH_OBJ)->total;
+        } catch (PDOException $e) {
+            error_log("Error counting users: " . $e->getMessage());
+            return 0;
+        }
+    }
+
+    public function verifyPassword(string $password, string $hash): bool
+    {
+        return password_verify($password, $hash);
     }
 }

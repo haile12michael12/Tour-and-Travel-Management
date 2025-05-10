@@ -131,5 +131,156 @@
     </div>
   </div>
 
+<!-- Deals Header -->
+<section class="deals-header py-5 bg-primary text-white">
+    <div class="container">
+        <h1 class="text-center">Special Deals & Offers</h1>
+        <p class="text-center lead">Find the best travel deals and exclusive offers for your next adventure.</p>
+    </div>
+</section>
+
+<!-- Featured Deals -->
+<section class="featured-deals py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Featured Deals</h2>
+        <div class="row">
+            <!-- Featured Deal Card -->
+            <div class="col-md-6 mb-4">
+                <div class="card deal-card">
+                    <div class="position-relative">
+                        <img src="/assets/images/deals/paris-special.jpg" class="card-img-top" alt="Paris Special">
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge bg-danger">-30%</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Paris Special Package</h5>
+                        <p class="card-text">Experience the city of love with our exclusive Paris package. Includes hotel stay, city tour, and Eiffel Tower visit.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="text-decoration-line-through text-muted">$999</span>
+                                <span class="text-primary fw-bold ms-2">$699</span>
+                                <span class="text-muted">/person</span>
+                            </div>
+                            <div class="text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">Valid until: Dec 31, 2024</small>
+                            <a href="/deals/paris-special" class="btn btn-primary">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- More Featured Deals -->
+            <div class="col-md-6 mb-4">
+                <div class="card deal-card">
+                    <div class="position-relative">
+                        <img src="/assets/images/deals/tokyo-special.jpg" class="card-img-top" alt="Tokyo Special">
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge bg-danger">-25%</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Tokyo Explorer Package</h5>
+                        <p class="card-text">Discover the perfect blend of tradition and modernity in Tokyo. Includes accommodation, guided tours, and cultural experiences.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="text-decoration-line-through text-muted">$1,299</span>
+                                <span class="text-primary fw-bold ms-2">$974</span>
+                                <span class="text-muted">/person</span>
+                            </div>
+                            <div class="text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">Valid until: Dec 31, 2024</small>
+                            <a href="/deals/tokyo-explorer" class="btn btn-primary">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Seasonal Offers -->
+<section class="seasonal-offers py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4">Seasonal Offers</h2>
+        <div class="row">
+            <!-- Summer Deals -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-sun fa-3x text-warning mb-3"></i>
+                        <h5 class="card-title">Summer Getaways</h5>
+                        <p class="card-text">Enjoy up to 40% off on selected summer destinations. Perfect for family vacations and beach holidays.</p>
+                        <a href="/deals/summer" class="btn btn-outline-primary">View Deals</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Winter Deals -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-snowflake fa-3x text-info mb-3"></i>
+                        <h5 class="card-title">Winter Escapes</h5>
+                        <p class="card-text">Special rates for winter destinations. Ski packages and cozy mountain retreats available.</p>
+                        <a href="/deals/winter" class="btn btn-outline-primary">View Deals</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Holiday Deals -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-gift fa-3x text-danger mb-3"></i>
+                        <h5 class="card-title">Holiday Specials</h5>
+                        <p class="card-text">Celebrate the holidays with our special packages. Limited time offers for festive destinations.</p>
+                        <a href="/deals/holiday" class="btn btn-outline-primary">View Deals</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h3>Get Exclusive Deals</h3>
+                <p>Subscribe to our newsletter and be the first to know about our special offers and promotions.</p>
+                <form action="/newsletter/subscribe" method="POST" class="row g-3 justify-content-center">
+                    <div class="col-md-8">
+                        <input type="email" class="form-control" name="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary w-100">Subscribe</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
 
 <?php require "includes/footer.php"; ?>

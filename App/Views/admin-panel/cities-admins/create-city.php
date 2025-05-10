@@ -5,7 +5,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title mb-5 d-inline">Create Country</h5>
+                    <h5 class="card-title mb-5 d-inline">Create City</h5>
                     
                     <?php if (isset($_SESSION['error'])): ?>
                         <div class="alert alert-danger">
@@ -16,21 +16,26 @@
                         </div>
                     <?php endif; ?>
 
-                    <form method="POST" action="<?= ADMINURL ?>/countries/create" enctype="multipart/form-data">
+                    <form method="POST" action="<?= ADMINURL ?>/cities/create" enctype="multipart/form-data">
                         <div class="form-outline mb-4 mt-4">
-                            <input type="text" name="name" id="name" class="form-control" placeholder="Country Name" required />
+                            <input type="text" name="name" id="name" class="form-control" placeholder="City Name" required />
                         </div>
 
                         <div class="form-outline mb-4 mt-4">
-                            <input type="text" name="continent" id="continent" class="form-control" placeholder="Continent" required />
+                            <select name="country_id" id="country_id" class="form-control" required>
+                                <option value="">Select Country</option>
+                                <?php foreach ($countries as $country): ?>
+                                    <option value="<?= $country->id ?>"><?= htmlspecialchars($country->name) ?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
 
                         <div class="form-outline mb-4 mt-4">
-                            <input type="text" name="population" id="population" class="form-control" placeholder="Population" required />
+                            <input type="number" name="price" id="price" class="form-control" placeholder="Price" required />
                         </div>
 
                         <div class="form-outline mb-4 mt-4">
-                            <input type="text" name="territory" id="territory" class="form-control" placeholder="Territory" required />
+                            <input type="number" name="population" id="population" class="form-control" placeholder="Population" required />
                         </div>
 
                         <div class="form-outline mb-4 mt-4">
@@ -42,7 +47,7 @@
                             <label for="description">Description</label>
                         </div>
 
-                        <button type="submit" name="submit" class="btn btn-primary mb-4 text-center">Create Country</button>
+                        <button type="submit" name="submit" class="btn btn-primary mb-4 text-center">Create City</button>
                     </form>
                 </div>
             </div>
@@ -50,4 +55,4 @@
     </div>
 </div>
 
-<?php require_once 'App/Views/layouts/footer.php'; ?>      
+<?php require_once 'App/Views/layouts/footer.php'; ?> 

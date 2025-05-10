@@ -5,8 +5,8 @@
         <div class="col">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title mb-5 d-inline">Countries</h5>
-                    <a href="<?= ADMINURL ?>/countries/create" class="btn btn-primary float-end">Create Country</a>
+                    <h5 class="card-title mb-5 d-inline">Cities</h5>
+                    <a href="<?= ADMINURL ?>/cities/create" class="btn btn-primary float-end">Create City</a>
 
                     <?php if (isset($_SESSION['success'])): ?>
                         <div class="alert alert-success">
@@ -31,32 +31,32 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Name</th>
-                                <th scope="col">Continent</th>
+                                <th scope="col">Country</th>
+                                <th scope="col">Price</th>
                                 <th scope="col">Population</th>
-                                <th scope="col">Territory</th>
                                 <th scope="col">Image</th>
                                 <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($countries as $country): ?>
+                            <?php foreach ($cities as $city): ?>
                                 <tr>
-                                    <th scope="row"><?= $country['id'] ?></th>
-                                    <td><?= htmlspecialchars($country['name']) ?></td>
-                                    <td><?= htmlspecialchars($country['continent']) ?></td>
-                                    <td><?= htmlspecialchars($country['population']) ?></td>
-                                    <td><?= htmlspecialchars($country['territory']) ?></td>
+                                    <th scope="row"><?= $city->id ?></th>
+                                    <td><?= htmlspecialchars($city->name) ?></td>
+                                    <td><?= htmlspecialchars($city->country_name) ?></td>
+                                    <td>$<?= number_format($city->price, 2) ?></td>
+                                    <td><?= number_format($city->population) ?></td>
                                     <td>
-                                        <img src="<?= ADMINURL ?>/countries-admins/images_countries/<?= $country['image'] ?>" 
-                                             alt="<?= htmlspecialchars($country['name']) ?>" 
+                                        <img src="<?= ADMINURL ?>/cities-admins/images_cities/<?= $city->image ?>" 
+                                             alt="<?= htmlspecialchars($city->name) ?>" 
                                              style="width: 50px; height: 50px; object-fit: cover;">
                                     </td>
                                     <td>
-                                        <a href="<?= ADMINURL ?>/countries/edit/<?= $country['id'] ?>" 
+                                        <a href="<?= ADMINURL ?>/cities/edit/<?= $city->id ?>" 
                                            class="btn btn-warning">Edit</a>
-                                        <a href="<?= ADMINURL ?>/countries/delete/<?= $country['id'] ?>" 
+                                        <a href="<?= ADMINURL ?>/cities/delete/<?= $city->id ?>" 
                                            class="btn btn-danger" 
-                                           onclick="return confirm('Are you sure you want to delete this country?')">Delete</a>
+                                           onclick="return confirm('Are you sure you want to delete this city?')">Delete</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -68,4 +68,4 @@
     </div>
 </div>
 
-<?php require_once 'App/Views/layouts/footer.php'; ?>      
+<?php require_once 'App/Views/layouts/footer.php'; ?> 

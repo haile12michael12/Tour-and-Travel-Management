@@ -3,77 +3,137 @@
 namespace App\Models;
 
 use App\Core\Model;
+use PDO;
+use PDOException;
 
 class Country extends Model
 {
-    public static function create(array $data): bool
-    {
-        return self::query(
-            "INSERT INTO countries (name, image, continent, population, territory, description) 
-             VALUES (?, ?, ?, ?, ?, ?)",
-            [
-                $data['name'],
-                $data['image'],
-                $data['continent'],
-                $data['population'],
-                $data['territory'],
-                $data['description']
-            ]
-        )->rowCount() > 0;
+    protected $table = 'countries';
+
+    public function __construct($db) {
+        $this->conn = $db;
     }
 
-    public static function update(int $id, array $data): bool
+    public function getById(int $id)
     {
-        return self::query(
-            "UPDATE countries SET 
-                name = ?, 
-                image = ?, 
-                continent = ?, 
-                population = ?, 
-                territory = ?, 
-                description = ? 
-             WHERE id = ?",
-            [
-                $data['name'],
-                $data['image'],
-                $data['continent'],
-                $data['population'],
-                $data['territory'],
-                $data['description'],
-                $id
-            ]
-        )->rowCount() > 0;
+        $sql = "SELECT * FROM {$this->table} WHERE id = :id";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(['id' => $id]);
+            return $stmt->fetch(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            error_log("Error finding country: " . $e->getMessage());
+            return null;
+        }
     }
 
-    public static function delete(int $id): bool
+    public function getAll(): array
     {
-        return self::query(
-            "DELETE FROM countries WHERE id = ?",
-            [$id]
-        )->rowCount() > 0;
+        $sql = "SELECT * FROM {$this->table} ORDER BY name ASC";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            error_log("Error fetching countries: " . $e->getMessage());
+            return [];
+        }
     }
 
-    public static function getById(int $id): ?array
+    public function create(array $data): bool
     {
-        return self::fetch(
-            "SELECT * FROM countries WHERE id = ?",
-            [$id]
-        );
+        $sql = "INSERT INTO {$this->table} 
+                 (name, continent, population, territory, description, image) 
+                 VALUES (:name, :continent, :population, :territory, :description, :image)";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([
+                'name' => $data['name'],
+                'continent' => $data['continent'],
+                'population' => $data['population'],
+                'territory' => $data['territory'],
+                'description' => $data['description'],
+                'image' => $data['image']
+            ]);
+        } catch (PDOException $e) {
+            error_log("Error creating country: " . $e->getMessage());
+            return false;
+        }
     }
 
-    public static function getAll(): array
+    public function update(int $id, array $data): bool
     {
-        return self::fetchAll(
-            "SELECT * FROM countries ORDER BY name"
-        );
+        $sql = "UPDATE {$this->table} 
+                 SET name = :name, 
+                     continent = :continent, 
+                     population = :population, 
+                     territory = :territory, 
+                     description = :description, 
+                     image = :image 
+                 WHERE id = :id";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([
+                'id' => $id,
+                'name' => $data['name'],
+                'continent' => $data['continent'],
+                'population' => $data['population'],
+                'territory' => $data['territory'],
+                'description' => $data['description'],
+                'image' => $data['image']
+            ]);
+        } catch (PDOException $e) {
+            error_log("Error updating country: " . $e->getMessage());
+            return false;
+        }
     }
 
-    public static function getByContinent(string $continent): array
+    public function delete(int $id): bool
     {
-        return self::fetchAll(
-            "SELECT * FROM countries WHERE continent = ? ORDER BY name",
-            [$continent]
-        );
+        $sql = "DELETE FROM {$this->table} WHERE id = :id";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute(['id' => $id]);
+        } catch (PDOException $e) {
+            error_log("Error deleting country: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function getPopular($limit = 6)
+    {
+        $sql = "SELECT c.*, COUNT(b.id) as booking_count 
+                FROM {$this->table} c 
+                LEFT JOIN cities ci ON c.id = ci.country_id 
+                LEFT JOIN bookings b ON ci.id = b.city_id 
+                GROUP BY c.id 
+                ORDER BY booking_count DESC 
+                LIMIT :limit";
+        
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->execute();
+        
+        return $stmt->fetchAll(\PDO::FETCH_OBJ);
+    }
+
+    public function getWithCities()
+    {
+        $sql = "SELECT c.*, COUNT(ci.id) as city_count 
+                FROM {$this->table} c 
+                LEFT JOIN cities ci ON c.id = ci.country_id 
+                GROUP BY c.id 
+                ORDER BY c.name ASC";
+        
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        
+        return $stmt->fetchAll(\PDO::FETCH_OBJ);
     }
 
     public function getAllCountriesWithAvgPrice() {

@@ -1,4 +1,4 @@
-<?php require "includes/header.php"; ?>
+<?php require_once 'App/Views/layouts/header.php'; ?>
 <?php require "config/config.php"; ?>
 <?php 
 
@@ -117,63 +117,110 @@
     </div>
   </div>
 
-  <div class="reservation-form">
-    <div class="container">
-      <div class="row">
-       
-        <div class="col-lg-12">
-          <form id="reservation-form"  method="POST" role="search" action="reservation.php?id=<?php echo $id; ?>">
-            <div class="row">
-              <div class="col-lg-12">
-                <h4>Make Your <em>Reservation</em> Through This <em>Form</em></h4>
-              </div>
-              <div class="col-lg-6">
-                  <fieldset>
-                      <label for="Name" class="form-label">Your Name</label>
-                      <input type="text" name="name" class="Name" placeholder="Ex. John Smithee" autocomplete="on" >
-                  </fieldset>
-              </div>
-              <div class="col-lg-6">
-                <fieldset>
-                    <label for="Number" class="form-label">Your Phone Number</label>
-                    <input type="text" name="phone_number" class="Number" placeholder="Ex. +xxx xxx xxx" autocomplete="on" >
-                </fieldset>
-              </div>
-              <div class="col-lg-6">
-                  <fieldset>
-                      <label for="chooseGuests" class="form-label">Number Of Guests</label>
-                      <select name="num_of_geusts" class="form-select" aria-label="Default select example" id="chooseGuests" onChange="this.form.click()">
-                          <option selected>ex. 3 or 4 or 5</option>
-                          <option type="checkbox" name="option1" value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                      </select>
-                  </fieldset>
-              </div>
-              <div class="col-lg-6">
-                <fieldset>
-                    <label for="Number" class="form-label">Check In Date</label>
-                    <input type="date" name="checkin_date" class="date">
-                </fieldset>
-              </div>
-              <div class="col-lg-12">
-                <fieldset>
-                    <input type="hidden" value="<?php echo $getCity->name; ?>" name="destination" class="Number" placeholder="" autocomplete="on" >
-                </fieldset>
-              </div>
-              <div class="col-lg-12">                        
-                  <fieldset>
-                      <button name="submit" type="submit" class="main-button">Make Your Reservation and Pay Now</button>
-                  </fieldset>
-              </div>
+  <div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Make a Reservation</h3>
+                </div>
+                <div class="card-body">
+                    <?php if (isset($_SESSION['success'])): ?>
+                        <div class="alert alert-success">
+                            <?php 
+                            echo $_SESSION['success'];
+                            unset($_SESSION['success']);
+                            ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (isset($_SESSION['error'])): ?>
+                        <div class="alert alert-danger">
+                            <?php 
+                            echo $_SESSION['error'];
+                            unset($_SESSION['error']);
+                            ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <form action="/reservation" method="POST">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="city_id" class="form-label">Destination</label>
+                                <select class="form-select" id="city_id" name="city_id" required>
+                                    <option value="">Select Destination</option>
+                                    <?php foreach ($cities as $city): ?>
+                                        <option value="<?php echo $city->id; ?>">
+                                            <?php echo htmlspecialchars($city->name); ?> - <?php echo htmlspecialchars($city->country_name); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="check_in" class="form-label">Check In Date</label>
+                                <input type="date" class="form-control" id="check_in" name="check_in" required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="check_out" class="form-label">Check Out Date</label>
+                                <input type="date" class="form-control" id="check_out" name="check_out" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="guests" class="form-label">Number of Guests</label>
+                                <input type="number" class="form-control" id="guests" name="guests" min="1" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Additional Information</label>
+                            <textarea class="form-control" id="message" name="message" rows="4"></textarea>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Submit Reservation</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-          </form>
         </div>
-      </div>
     </div>
   </div>
 
-<?php require "includes/footer.php"; ?>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set minimum date for check-in to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('check_in').min = today;
+    
+    // Update check-out minimum date when check-in is selected
+    document.getElementById('check_in').addEventListener('change', function() {
+        document.getElementById('check_out').min = this.value;
+    });
+});
+</script>
+
+<?php require_once 'App/Views/layouts/footer.php'; ?>
 
